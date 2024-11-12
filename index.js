@@ -4,6 +4,7 @@ dotenv.config();
 import { supabase } from "./config/supabase.js";
 
 const app = express();
+const env = process.env;
 
 app.get("/", (req, res) => {
     res.send(`
@@ -30,30 +31,22 @@ app.get("/contact", (req, res) => {
 app.get("/test", async (req, res) => {
     let { data: songs, error } = await supabase
         .from("songs")
-        .select(`*, artists(name)`);
+        .select(`*, artists(name, image)`);
     if (error) {
         return res.status(500).send(`Error: ${error.message}`);
     }
 
-    if (songs && songs.length > 0) {
-        console.log(songs);
-
-        res.send(
-            `<p>Songs found:</p>
+    res.send(
+        `<p>Songs found:</p>
             <ul>${songs
                 .map(
                     (song) =>
-                        `<li><strong>Title:</strong> ${song.title} - <strong>Artist:</strong> ${song.artists.name}</li>`
+                        `<li><strong>Title:</strong> ${song.title} - <strong>Artist:</strong> ${song.artists.name} - <img style='width:100px' src="${env.SUPABASE_URL}/storage/v1/object/public/images/artists/${song.artists.image}" /></li>`
                 )
                 .join("")}</ul>`
-        );
-
-        res.end();
-    } else {
-        res.send("<p>No songs found</p>");
-    }
+    );
 });
 
-app.listen(process.env.PORT, () => {
-    console.log(`Express server kører på http://localhost:${process.env.PORT}`);
+app.listen(env.PORT, () => {
+    console.log(`Express server kører på http://localhost:${env.PORT}`);
 });
