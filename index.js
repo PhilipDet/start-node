@@ -8,24 +8,39 @@ const env = process.env;
 
 app.get("/", (req, res) => {
     res.send(`
-        <h1>Velkommen til min hjemmeside!</h1>
-        <p>Vi er en shop..</p>    
+        <h1>Supabase API</h1>   
     `);
 });
 
-app.get("/products", (req, res) => {
-    res.send(`
-        <h1>Produkter</h1>
-        <ul>
-            <li>Produkt 1</li>
-            <li>Produkt 2</li>
-            <li>Produkt 3</li>
-        </ul>
-    `);
+app.get("/songs", async (req, res) => {
+    let { data: songs, error } = await supabase
+        .from("songs")
+        .select(`title, id`);
+    if (error) {
+        return res.status(500).send(`Error: ${error.message}`);
+    }
+
+    res.send(songs);
 });
 
-app.get("/contact", (req, res) => {
-    res.send("Du kan kontakte os her...");
+app.get("/artists", async (req, res) => {
+    let { data: artists, error } = await supabase.from("artists").select(`*`);
+    if (error) {
+        return res.status(500).send(`Error: ${error.message}`);
+    }
+
+    res.send(artists);
+});
+
+app.get("/albums", async (req, res) => {
+    let { data: albums, error } = await supabase
+        .from("albums")
+        .select(`title, image, artists(name)`);
+    if (error) {
+        return res.status(500).send(`Error: ${error.message}`);
+    }
+
+    res.send(albums);
 });
 
 app.get("/test", async (req, res) => {
@@ -41,7 +56,11 @@ app.get("/test", async (req, res) => {
             <ul>${songs
                 .map(
                     (song) =>
-                        `<li><strong>Title:</strong> ${song.title} - <strong>Artist:</strong> ${song.artists.name} - <img style='width:100px' src="${env.SUPABASE_URL}/storage/v1/object/public/images/artists/${song.artists.image}" /></li>`
+                        `<li>
+                            <strong>Title:</strong> ${song.title} - 
+                            <strong>Artist:</strong> ${song.artists.name} - 
+                            <img style='width:100px' src="${env.SUPABASE_URL}/storage/v1/object/public/images/artists/${song.artists.image}" />
+                        </li>`
                 )
                 .join("")}</ul>`
     );
