@@ -2,9 +2,13 @@ import express from "express";
 import dotenv from "dotenv";
 dotenv.config();
 import { supabase } from "./config/supabase.js";
+
 import { personModel } from "./classes/personModel.js";
 import { carModel } from "./classes/carModel.js";
-import { musicModel } from "./models/musicModel.js";
+
+import { songModel } from "./models/songModel.js";
+import { artistModel } from "./models/artistModel.js";
+import { albumModel } from "./models/albumModel.js";
 
 const app = express();
 const env = process.env;
@@ -27,10 +31,9 @@ app.get("/", (req, res) => {
             <img src="/img/background.jpg" />
             <h1>Velkommen til min API</h1>
             <ul>
-                <li><a href="/songs">Songs</a></li>
-                <li><a href="/artists">Artists</a></li>
-                <li><a href="/albums">Albums</a></li>
+                <li><a href="/music">Musik</a></li>
                 <li><a href="/person">Person</a></li>
+                <li><a href="/car">Bil</a></li>
             </ul>
         </body>
         </html>
@@ -39,9 +42,9 @@ app.get("/", (req, res) => {
 });
 
 app.get("/music", async (req, res) => {
-    const songs = await musicModel.getAllSongs();
-    const artists = await musicModel.getAllArtists();
-    const albums = await musicModel.getAllAlbums();
+    const songs = await songModel.getAllSongs();
+    const artists = await artistModel.getAllArtists();
+    const albums = await albumModel.getAllAlbums();
     console.log(songs);
     console.log(artists);
     console.log(albums);
