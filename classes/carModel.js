@@ -28,7 +28,7 @@ export class carModel {
     presentKmPerYear() {
         return `${getKmPerYear(this.mileage_km, this.production_year).toFixed(
             0
-        )}km driven per year`;
+        )}km har bilen kørt i gennemsnit pr år`;
     }
 
     presentChargePerYear = () => {

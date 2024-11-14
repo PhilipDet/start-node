@@ -4,6 +4,7 @@ dotenv.config();
 import { supabase } from "./config/supabase.js";
 import { personModel } from "./classes/personModel.js";
 import { carModel } from "./classes/carModel.js";
+import { musicModel } from "./models/musicModel.js";
 
 const app = express();
 const env = process.env;
@@ -37,35 +38,15 @@ app.get("/", (req, res) => {
     res.send(html);
 });
 
-app.get("/songs", async (req, res) => {
-    let { data: songs, error } = await supabase
-        .from("songs")
-        .select(`title, id`);
-    if (error) {
-        return res.status(500).send(`Error: ${error.message}`);
-    }
+app.get("/music", async (req, res) => {
+    const songs = await musicModel.getAllSongs();
+    const artists = await musicModel.getAllArtists();
+    const albums = await musicModel.getAllAlbums();
+    console.log(songs);
+    console.log(artists);
+    console.log(albums);
 
-    res.send(songs);
-});
-
-app.get("/artists", async (req, res) => {
-    let { data: artists, error } = await supabase.from("artists").select(`*`);
-    if (error) {
-        return res.status(500).send(`Error: ${error.message}`);
-    }
-
-    res.send(artists);
-});
-
-app.get("/albums", async (req, res) => {
-    let { data: albums, error } = await supabase
-        .from("albums")
-        .select(`title, image, artists(name)`);
-    if (error) {
-        return res.status(500).send(`Error: ${error.message}`);
-    }
-
-    res.send(albums);
+    res.end();
 });
 
 app.get("/person", async (req, res) => {
