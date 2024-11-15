@@ -13,6 +13,9 @@ import { albumModel } from "./models/albumModel.js";
 const app = express();
 const env = process.env;
 
+import path from "path";
+import { fileURLToPath } from "url";
+
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
