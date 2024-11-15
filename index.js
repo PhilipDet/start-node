@@ -13,7 +13,10 @@ import { albumModel } from "./models/albumModel.js";
 const app = express();
 const env = process.env;
 
-app.use(express.static("public"));
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+
+app.use(express.static(path.join(__dirname, "public")));
 
 app.get("/", (req, res) => {
     let html = `
