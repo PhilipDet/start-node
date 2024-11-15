@@ -5,7 +5,9 @@ export class songModel {
         try {
             let { data, error } = await supabase
                 .from("songs")
-                .select("id, title, content, created_at, artists(name)");
+                .select(
+                    "title, content, created_at, artists(name, albums(title))"
+                );
             if (error) {
                 throw new Error(error.message);
             } else {
