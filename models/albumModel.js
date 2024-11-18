@@ -35,15 +35,19 @@ export class albumModel {
 
     static async createAlbum(album) {
         try {
-            let { data, error } = await supabase.from("albums").insert([
-                {
-                    artist_id: album.artist_id,
-                    title: album.title,
-                    description: album.description,
-                    image: album.image,
-                    release_date: album.release_date,
-                },
-            ]);
+            let { data, error } = await supabase
+                .from("albums")
+                .insert([
+                    {
+                        artist_id: album.artist_id,
+                        title: album.title,
+                        description: album.description,
+                        image: album.image,
+                        release_date: album.release_date,
+                    },
+                ])
+                .select()
+                .single();
             if (error) {
                 throw new Error(error.message);
             } else {

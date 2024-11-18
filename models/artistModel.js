@@ -35,13 +35,17 @@ export class artistModel {
 
     static async createArtist(artist) {
         try {
-            let { data, error } = await supabase.from("artists").insert([
-                {
-                    name: artist.name,
-                    description: artist.description,
-                    image: artist.image,
-                },
-            ]);
+            let { data, error } = await supabase
+                .from("artists")
+                .insert([
+                    {
+                        name: artist.name,
+                        description: artist.description,
+                        image: artist.image,
+                    },
+                ])
+                .select()
+                .single();
             if (error) {
                 throw new Error(error.message);
             } else {
