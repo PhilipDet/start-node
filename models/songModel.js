@@ -34,4 +34,28 @@ export class songModel {
             console.error(`Fejl: kan ikke hente sang, ${error}`);
         }
     }
+
+    static async createRecord(song) {
+        try {
+            let { data, error } = await supabase
+                .from("songs")
+                .insert([
+                    {
+                        title: song.title,
+                        content: song.content,
+                        lyrics: song.lyrics,
+                        artist_id: song.artist_id,
+                    },
+                ])
+                .select()
+                .single();
+            if (error) {
+                throw new Error(error.message);
+            } else {
+                return data;
+            }
+        } catch (error) {
+            console.error(`Fejl: kan ikke oprette sang, ${error}`);
+        }
+    }
 }
