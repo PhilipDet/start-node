@@ -35,6 +35,11 @@ export class songModel {
         }
     }
 
+    /**
+     *
+     * @param {object} song
+     * @returns {object}
+     */
     static async createRecord(song) {
         try {
             let { data, error } = await supabase
@@ -47,8 +52,7 @@ export class songModel {
                         artist_id: song.artist_id,
                     },
                 ])
-                .select()
-                .single();
+                .select();
             if (error) {
                 throw new Error(error.message);
             } else {
@@ -56,6 +60,33 @@ export class songModel {
             }
         } catch (error) {
             console.error(`Fejl: kan ikke oprette sang, ${error}`);
+        }
+    }
+
+    /**
+     * Update Record
+     * @param {object} song
+     * @returns {object}
+     */
+    static async updateRecord(song) {
+        try {
+            let { data, error } = await supabase
+                .from("songs")
+                .update({
+                    title: song.title,
+                    content: song.content,
+                    lyrics: song.lyrics,
+                    artist_id: song.artist_id,
+                })
+                .eq("id", song.id)
+                .select();
+            if (error) {
+                throw new Error(error.message);
+            } else {
+                return data;
+            }
+        } catch (error) {
+            console.error(`Fejl: kan ikke opdatere sang, ${error}`);
         }
     }
 }

@@ -46,8 +46,7 @@ export class albumModel {
                         release_date: album.release_date,
                     },
                 ])
-                .select()
-                .single();
+                .select();
             if (error) {
                 throw new Error(error.message);
             } else {
@@ -55,6 +54,34 @@ export class albumModel {
             }
         } catch (error) {
             console.error(`Fejl: kan ikke oprette album, ${error}`);
+        }
+    }
+
+    /**
+     *
+     * @param {object} album
+     * @returns {object}
+     */
+    static async updateAlbum(album) {
+        try {
+            let { data, error } = await supabase
+                .from("albums")
+                .update({
+                    artist_id: album.artist_id,
+                    title: album.title,
+                    description: album.description,
+                    image: album.image,
+                    release_date: album.release_date,
+                })
+                .eq("id", album.id)
+                .select();
+            if (error) {
+                throw new Error(error.message);
+            } else {
+                return data;
+            }
+        } catch (error) {
+            console.error(`Fejl: kan ikke opdatere album, ${error}`);
         }
     }
 }

@@ -44,8 +44,7 @@ export class artistModel {
                         image: artist.image,
                     },
                 ])
-                .select()
-                .single();
+                .select();
             if (error) {
                 throw new Error(error.message);
             } else {
@@ -53,6 +52,32 @@ export class artistModel {
             }
         } catch (error) {
             console.error(`Fejl: kan ikke oprette kunstner, ${error}`);
+        }
+    }
+
+    /**
+     *
+     * @param {object} artist
+     * @returns {object}
+     */
+    static async updateArtist(artist) {
+        try {
+            let { data, error } = await supabase
+                .from("artists")
+                .update({
+                    name: artist.name,
+                    description: artist.description,
+                    image: artist.image,
+                })
+                .eq("id", artist.id)
+                .select();
+            if (error) {
+                throw new Error(error.message);
+            } else {
+                return data;
+            }
+        } catch (error) {
+            console.error(`Fejl: kan ikke opdatere kunstner, ${error}`);
         }
     }
 }
