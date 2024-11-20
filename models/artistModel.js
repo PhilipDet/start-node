@@ -80,4 +80,27 @@ export class artistModel {
             console.error(`Fejl: kan ikke opdatere kunstner, ${error}`);
         }
     }
+
+    /**
+     * Delete Artist
+     * @param {object} artist
+     * @returns {object}
+     */
+
+    static async deleteArtist(artist) {
+        try {
+            let { data, error } = await supabase
+                .from("artists")
+                .delete()
+                .eq("id", artist.id)
+                .select();
+            if (error) {
+                throw new Error(error.message);
+            } else {
+                return data;
+            }
+        } catch (error) {
+            console.error(`Fejl: kan ikke slette kunstner, ${error}`);
+        }
+    }
 }

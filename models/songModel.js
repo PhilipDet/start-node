@@ -89,4 +89,26 @@ export class songModel {
             console.error(`Fejl: kan ikke opdatere sang, ${error}`);
         }
     }
+
+    /**
+     * Delete Record
+     * @param {object} song
+     * @returns {object}
+     */
+    static async deleteRecord(song) {
+        try {
+            let { data, error } = await supabase
+                .from("songs")
+                .delete()
+                .eq("id", song.id)
+                .select();
+            if (error) {
+                throw new Error(error.message);
+            } else {
+                return data;
+            }
+        } catch (error) {
+            console.error(`Fejl: kan ikke slette sang, ${error}`);
+        }
+    }
 }

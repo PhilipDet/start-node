@@ -84,4 +84,27 @@ export class albumModel {
             console.error(`Fejl: kan ikke opdatere album, ${error}`);
         }
     }
+
+    /**
+     * Delete Album
+     * @param {object} album
+     * @returns {object}
+     */
+
+    static async deleteAlbum(album) {
+        try {
+            let { data, error } = await supabase
+                .from("albums")
+                .delete()
+                .eq("id", album.id)
+                .select();
+            if (error) {
+                throw new Error(error.message);
+            } else {
+                return data;
+            }
+        } catch (error) {
+            console.error(`Fejl: kan ikke slette album, ${error}`);
+        }
+    }
 }
